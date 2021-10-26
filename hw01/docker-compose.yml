@@ -1,0 +1,21 @@
+version: '3.8'
+
+volumes:
+    prometheus_data:
+    
+services:
+  prometheus:
+    image: 'prom/prometheus:v2.28.0'
+    ports:
+        - 9090:9090
+    volumes:
+        - './configs/prometheus/targets:/etc/prometheus/targets'
+        - './configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml'
+        - 'prometheus_data:/prometheus'
+    command:
+        - '--config.file=/etc/prometheus/prometheus.yml'
+        - '--storage.tsdb.path=/prometheus'
+        - '--storage.tsdb.retention.time=70d'
+        - '--log.level=debug'
+        - '--web.enable-lifecycle'
+    restart: unless-stopped
