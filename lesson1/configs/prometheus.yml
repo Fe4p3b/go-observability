@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 10s
+  evaluation_interval: 5s
+
+rule_files:
+
+alerting:
+
+scrape_configs:
+  - job_name: "http"
+    scrape_interval: 30s
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - app:9000
+        labels:
+          environment: prod
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __address__
+      - source_labels: [__param_target]
+        target_label: instance
